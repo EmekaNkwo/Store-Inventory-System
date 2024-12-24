@@ -1,3 +1,63 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "prettier", "import"],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_" // Ignore unused args starting with "_"
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true, // Enforce single quotes for JavaScript/JSX
+        "jsxSingleQuote": true, // Enforce single quotes in JSX
+        "quoteProps": "consistent", // Ensure consistent quoting of object properties
+        "bracketSpacing": true,
+        "tabWidth": 2,
+        "endOfLine": "auto"
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external"], // Built-in and external imports come first
+          ["internal"], // Then our custom internal imports
+          ["parent", "sibling", "index"] // Parent, sibling, and index imports last
+        ],
+        "newlines-between": "always"
+      }
+    ],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "react/jsx-uses-react": "off",
+    "@typescript-eslint/no-unused-expressions": [
+      "error",
+      { "allowShortCircuit": true, "allowTernary": true }
+    ],
+    "react/react-in-jsx-scope": "off"
+  }
 }
