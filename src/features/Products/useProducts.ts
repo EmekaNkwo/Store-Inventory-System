@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { notification } from 'antd';
 
 import { useInventoryStore } from '@/store/useInventoryStore';
 import { ApiResponse, Product } from '@/shared/models';
-import { notification } from 'antd';
 
 const fetchProducts = async (): Promise<Product[]> => {
   const response = await fetch('/api/product');

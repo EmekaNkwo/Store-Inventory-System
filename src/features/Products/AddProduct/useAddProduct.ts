@@ -1,7 +1,8 @@
-import { ApiResponse, Product, ProductStatus } from '@/shared/models';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import { useState } from 'react';
+
+import { ApiResponse, Product, ProductStatus } from '@/shared/models';
 
 interface IAddProduct {
   name: string;
@@ -95,7 +96,8 @@ const useAddProduct = () => {
   return {
     handleAddProduct,
     addSuccess: addProductMutation.isSuccess,
-    updateProduct: updateProductMutation.mutate,
+
+    handleUpdateProduct,
     updateSuccess: updateProductMutation.isSuccess,
     isAddingProduct: addProductMutation.isPending,
     isUpdatingProduct: updateProductMutation.isPending,

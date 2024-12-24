@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 
 import prisma from '@/lib/prisma';
 import { Product, ProductStatus } from '@/shared/models';
 import { generateProductId } from '@/lib/productIdGenerator';
-import { Prisma } from '@prisma/client';
 
 const validateProduct = (
   input: Omit<Product, 'id' | 'sku' | 'createdAt' | 'updatedAt'>

@@ -13,6 +13,7 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "ignorePatterns": ["**/src/shared/models.tsx"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {

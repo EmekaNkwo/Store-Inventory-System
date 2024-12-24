@@ -18,7 +18,7 @@ const Inventory = () => {
     handleDeleteProduct,
     isDeletingProduct,
   } = useProducts();
-  const { products, setProduct, product } = useInventoryStore((state) => state);
+  const { products, setProduct } = useInventoryStore((state) => state);
 
   const columns: TableProps<Product>['columns'] = [
     {

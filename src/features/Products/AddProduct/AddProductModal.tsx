@@ -7,9 +7,10 @@ import {
   TextInput,
 } from '@/shared/UIs/ReusableComponent';
 import { ModalProps, ProductStatus } from '@/shared/models';
-import useAddProduct from './useAddProduct';
 import { numberRegex } from '@/shared/regex';
 import { useInventoryStore } from '@/store/useInventoryStore';
+
+import useAddProduct from './useAddProduct';
 
 const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
   const {

@@ -1,5 +1,6 @@
-import { Product } from '@/shared/models';
 import { create } from 'zustand';
+
+import { Product } from '@/shared/models';
 
 interface InventoryState {
   products: Product[];
