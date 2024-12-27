@@ -6,6 +6,18 @@ export enum ProductStatus {
   OUT_OF_STOCK = 'OUT_OF_STOCK',
   DISCONTINUED = 'DISCONTINUED',
 }
+
+export enum StaffStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum StaffRole {
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  STAFF = 'STAFF',
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -15,6 +27,17 @@ export interface Product {
   type: string;
   status: ProductStatus;
   variant?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface Staff {
+  id: number;
+  name: string;
+  email: string;
+  role: StaffRole;
+  phoneNumber: string;
+  status?: StaffStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }

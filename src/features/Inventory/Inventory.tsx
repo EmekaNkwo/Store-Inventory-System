@@ -1,11 +1,15 @@
 'use client';
 import React from 'react';
-import { Button, Popconfirm, Space, TableProps, Tag } from 'antd';
+import { Popconfirm, Space, TableProps, Tag } from 'antd';
 
-import { useInventoryStore } from '@/store/useInventoryStore';
+import { useProductStore } from '@/features/Products/useProductStore';
 import { TextHeader } from '@/shared/UIs/CustomTexts';
 import { Product } from '@/shared/models';
-import { CustomTable, OutlinedButton } from '@/shared/UIs/ReusableComponent';
+import {
+  CustomTable,
+  FilledButton,
+  OutlinedButton,
+} from '@/shared/UIs/ReusableComponent';
 
 import { useProducts } from '../Products/useProducts';
 import AddProductModal from '../Products/AddProduct/AddProductModal';
@@ -18,8 +22,14 @@ const Inventory = () => {
     handleDeleteProduct,
     isDeletingProduct,
   } = useProducts();
-  const { products, setProduct } = useInventoryStore((state) => state);
+  const { products, setProduct, setIsEditProduct } = useProductStore(
+    (state) => state
+  );
 
+  const handleClearProduct = () => {
+    setProduct(null);
+    setIsEditProduct(false);
+  };
   const columns: TableProps<Product>['columns'] = [
     {
       title: 'Name',
@@ -87,6 +97,7 @@ const Inventory = () => {
           <OutlinedButton
             title="Edit"
             onClick={() => {
+              setIsEditProduct(true);
               setProduct(record);
               setOpenModal(true);
             }}
@@ -120,7 +131,14 @@ const Inventory = () => {
       <div className="flex flex-col gap-3">
         <TextHeader text="Inventory" />
         <div className="flex justify-end">
-          <Button onClick={() => setOpenModal(true)}> Add Product</Button>
+          <FilledButton
+            onClick={() => {
+              handleClearProduct();
+              setOpenModal(true);
+            }}
+            size="middle"
+            title="Add Product"
+          />
         </div>
         <CustomTable
           columns={columns}

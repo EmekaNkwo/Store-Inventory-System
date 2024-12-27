@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect } from 'react';
 
 import {
@@ -8,7 +9,7 @@ import {
 } from '@/shared/UIs/ReusableComponent';
 import { ModalProps, ProductStatus } from '@/shared/models';
 import { numberRegex } from '@/shared/regex';
-import { useInventoryStore } from '@/store/useInventoryStore';
+import { useProductStore } from '@/features/Products/useProductStore';
 
 import useAddProduct from './useAddProduct';
 
@@ -17,23 +18,42 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
     addProductState,
     setAddProductState,
     handleAddProduct,
+    handleUpdateProduct,
     isAddingProduct,
     addSuccess,
+    editProductState,
+    updateSuccess,
+    setEditProductState,
+    isUpdatingProduct,
   } = useAddProduct();
 
-  const { product } = useInventoryStore((state) => state);
-
-  console.log(product);
-
   useEffect(() => {
-    if (addSuccess) {
+    if (addSuccess || updateSuccess) {
       setOpenModal(false);
     }
-  }, [addSuccess]);
+  }, [addSuccess, updateSuccess]);
+
+  const { isEditProduct } = useProductStore((state) => state);
+
+  const isButtonDisabled = () => {
+    return isEditProduct
+      ? !editProductState.name ||
+          !editProductState.quantity ||
+          !editProductState.price ||
+          !editProductState.type ||
+          !editProductState.status ||
+          !editProductState.variant
+      : !addProductState.name ||
+          !addProductState.quantity ||
+          !addProductState.price ||
+          !addProductState.type ||
+          !addProductState.status ||
+          !addProductState.variant;
+  };
   return (
     <>
       <CustomModal
-        title="Add Product"
+        title={isEditProduct ? 'Edit Product' : 'Add Product'}
         centered
         openModal={openModal}
         setOpenModal={setOpenModal}
@@ -43,32 +63,60 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
           <div className="grid grid-cols-2 gap-4 my-[1.5rem]">
             <TextInput
               title="Name"
-              value={addProductState.name}
+              value={
+                isEditProduct ? editProductState.name : addProductState.name
+              }
               onChange={(e) =>
-                setAddProductState({ ...addProductState, name: e.target.value })
+                isEditProduct
+                  ? setEditProductState({
+                      ...editProductState,
+                      name: e.target.value,
+                    })
+                  : setAddProductState({
+                      ...addProductState,
+                      name: e.target.value,
+                    })
               }
             />
             <TextInput
               title="Quantity"
-              value={addProductState.quantity}
+              value={
+                isEditProduct
+                  ? editProductState.quantity
+                  : addProductState.quantity
+              }
               onChange={(e) => {
-                if (numberRegex.test(e.target.value)) {
-                  setAddProductState({
-                    ...addProductState,
-                    quantity: e.target.value,
-                  });
+                // Allow empty string or numbers
+                if (e.target.value === '' || numberRegex.test(e.target.value)) {
+                  isEditProduct
+                    ? setEditProductState({
+                        ...editProductState,
+                        quantity: e.target.value,
+                      })
+                    : setAddProductState({
+                        ...addProductState,
+                        quantity: e.target.value,
+                      });
                 }
               }}
             />
             <TextInput
               title="Price"
-              value={addProductState.price}
+              value={
+                isEditProduct ? editProductState.price : addProductState.price
+              }
               onChange={(e) => {
-                if (numberRegex.test(e.target.value)) {
-                  setAddProductState({
-                    ...addProductState,
-                    price: e.target.value,
-                  });
+                // Allow empty string or numbers
+                if (e.target.value === '' || numberRegex.test(e.target.value)) {
+                  isEditProduct
+                    ? setEditProductState({
+                        ...editProductState,
+                        price: e.target.value,
+                      })
+                    : setAddProductState({
+                        ...addProductState,
+                        price: e.target.value,
+                      });
                 }
               }}
             />
@@ -79,9 +127,13 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
                 { value: 'fashion', label: 'Fashion' },
                 { value: 'electronics', label: 'Electronics' },
               ]}
-              value={addProductState.type}
+              value={
+                isEditProduct ? editProductState.type : addProductState.type
+              }
               onChange={(value) => {
-                setAddProductState({ ...addProductState, type: value });
+                isEditProduct
+                  ? setEditProductState({ ...editProductState, type: value })
+                  : setAddProductState({ ...addProductState, type: value });
               }}
             />
             <SelectInput
@@ -90,9 +142,13 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
                 value: status,
                 label: status,
               }))}
-              value={addProductState.status}
+              value={
+                isEditProduct ? editProductState.status : addProductState.status
+              }
               onChange={(value) => {
-                setAddProductState({ ...addProductState, status: value });
+                isEditProduct
+                  ? setEditProductState({ ...editProductState, status: value })
+                  : setAddProductState({ ...addProductState, status: value });
               }}
             />
             <SelectInput
@@ -102,17 +158,24 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
                 { value: 'medium', label: 'Medium' },
                 { value: 'large', label: 'Large' },
               ]}
-              value={addProductState.variant}
-              onChange={(value) =>
-                setAddProductState({ ...addProductState, variant: value })
+              value={
+                isEditProduct
+                  ? editProductState.variant
+                  : addProductState.variant
               }
+              onChange={(value) => {
+                isEditProduct
+                  ? setEditProductState({ ...editProductState, variant: value })
+                  : setAddProductState({ ...addProductState, variant: value });
+              }}
             />
           </div>
           <FilledButton
             title="Create product"
-            loading={isAddingProduct}
+            loading={isAddingProduct || isUpdatingProduct}
+            disabled={isButtonDisabled()}
             onClick={() => {
-              handleAddProduct();
+              isEditProduct ? handleUpdateProduct() : handleAddProduct();
             }}
           />
         </div>
@@ -121,4 +184,4 @@ const AddProductModal = ({ openModal, setOpenModal }: ModalProps) => {
   );
 };
 
-export default AddProductModal;
+export default React.memo(AddProductModal);

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import React from 'react';
 import localFont from 'next/font/local';
+import 'react-phone-input-2/lib/style.css';
 import './globals.css';
 
 import ReactQueryProvider from '@/store/ReactQueryProvider';
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

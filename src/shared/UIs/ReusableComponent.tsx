@@ -10,6 +10,7 @@ import {
   Table,
 } from 'antd';
 import React from 'react';
+import PhoneInput, { PhoneInputProps } from 'react-phone-input-2';
 
 interface IModalProps extends ModalProps {
   title: string;
@@ -27,6 +28,10 @@ interface IButtonProps extends ButtonProps {
 }
 
 interface ISelectProps extends SelectProps {
+  title?: string;
+}
+
+interface IPhoneNumberProps extends PhoneInputProps {
   title?: string;
 }
 
@@ -76,9 +81,10 @@ export const OutlinedButton = ({ title, ...props }: IButtonProps) => {
 export const FilledButton = ({ title, ...props }: IButtonProps) => {
   return (
     <Button
-      size="large"
+      type="primary"
+      size={props.size || 'large'}
       {...props}
-      className={`border-none bg-blue-600 text-white font-medium ${props.className}`}
+      className={`border-none bg-blue-600  text-white font-medium ${props.className}`}
     >
       {title}
     </Button>
@@ -90,6 +96,27 @@ export const SelectInput = ({ title, ...props }: ISelectProps) => {
     <div className="flex flex-col gap-1">
       {title && <label className="text-[15px] font-medium">{title}</label>}
       <Select size="large" {...props} />
+    </div>
+  );
+};
+
+export const PhoneInputField = ({ title, ...props }: IPhoneNumberProps) => {
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      {title && <label className="text-[15px] font-medium">{title}</label>}
+      <PhoneInput
+        {...props}
+        inputStyle={{
+          width: '100%',
+          padding: '1.2rem 3rem',
+          fontSize: '16px',
+          border: '1px solid #ccc',
+          borderRadius: '5px',
+          outline: 'none',
+        }}
+        autoFormat
+        enableSearch
+      />
     </div>
   );
 };

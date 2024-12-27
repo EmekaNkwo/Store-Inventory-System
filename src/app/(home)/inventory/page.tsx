@@ -5,7 +5,6 @@ import Inventory from '@/features/Inventory/Inventory';
 const page = () => {
   return (
     <>
-      {' '}
       <Inventory />
     </>
   );

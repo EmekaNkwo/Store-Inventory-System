@@ -24,6 +24,17 @@ enum ProductStatus {
   DISCONTINUED
 }
 
+enum StaffRole {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+enum StaffStatus {
+  ACTIVE
+  INACTIVE
+}
+
 
 model Product {
   id        Int      @id @default(autoincrement()) @map("_id")
@@ -36,6 +47,18 @@ model Product {
   variant   String?       // Optional variant field
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+}
+
+model Staff {
+  id          Int         @id @default(autoincrement()) @map("_id")
+  name        String
+  email       String      @unique
+  role        String
+  phoneNumber String      @unique
+  status      StaffStatus @default(ACTIVE)
+  password    String?     // Optional field for staff login credentials
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 // model Product {

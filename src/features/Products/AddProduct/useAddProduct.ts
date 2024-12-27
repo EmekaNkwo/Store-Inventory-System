@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ApiResponse, Product, ProductStatus } from '@/shared/models';
+import { useProductStore } from '@/features/Products/useProductStore';
 
 interface IAddProduct {
   name: string;
@@ -23,8 +24,25 @@ const useAddProduct = () => {
   };
   const [addProductState, setAddProductState] =
     useState<IAddProduct>(initialState);
+  const [editProductState, setEditProductState] =
+    useState<IAddProduct>(initialState);
 
   const queryClient = useQueryClient();
+
+  const { product } = useProductStore((state) => state);
+
+  useEffect(() => {
+    if (product) {
+      setEditProductState({
+        name: product.name,
+        quantity: String(product.quantity),
+        price: String(product.price),
+        type: product.type,
+        status: product.status,
+        variant: product.variant,
+      });
+    }
+  }, [product]);
 
   const addProductMutation = useMutation({
     mutationFn: async (newProduct: Omit<Product, 'id'>) => {
@@ -89,8 +107,17 @@ const useAddProduct = () => {
     });
   };
 
-  const handleUpdateProduct = (product: Product) => {
-    updateProductMutation.mutate(product);
+  const handleUpdateProduct = () => {
+    updateProductMutation.mutate({
+      name: editProductState.name,
+      quantity: Number(editProductState.quantity),
+      price: Number(editProductState.price),
+      type: editProductState.type,
+      status: editProductState.status as ProductStatus,
+      variant: editProductState.variant,
+      id: Number(product?.id),
+      sku: product?.sku,
+    });
   };
 
   return {
@@ -104,6 +131,9 @@ const useAddProduct = () => {
 
     addProductState,
     setAddProductState,
+
+    editProductState,
+    setEditProductState,
   };
 };
 

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { notification } from 'antd';
 
-import { useInventoryStore } from '@/store/useInventoryStore';
+import { useProductStore } from '@/features/Products/useProductStore';
 import { ApiResponse, Product } from '@/shared/models';
 
 const fetchProducts = async (): Promise<Product[]> => {
@@ -16,7 +16,7 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 export const useProducts = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { setProducts } = useInventoryStore();
+  const { setProducts } = useProductStore();
   const queryClient = useQueryClient();
   const productsQuery = useQuery<Product[], Error>({
     queryKey: ['products'],
