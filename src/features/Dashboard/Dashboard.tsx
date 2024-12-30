@@ -100,7 +100,7 @@ const Dashboard = () => {
               />
             ))}
       </div>
-      <div className="grid grid-cols-2 gap-4 mt-5">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-5">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <SubTextHeader text="Products" />
