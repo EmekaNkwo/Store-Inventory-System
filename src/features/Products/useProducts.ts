@@ -3,16 +3,8 @@ import { useEffect, useState } from 'react';
 import { notification } from 'antd';
 
 import { useProductStore } from '@/features/Products/useProductStore';
-import { ApiResponse, Product } from '@/shared/models';
-
-const fetchProducts = async (): Promise<Product[]> => {
-  const response = await fetch('/api/product');
-  const json: ApiResponse<Product[]> = await response.json();
-  if (json.status === 'failed') {
-    throw new Error(json.message || 'Failed to fetch products');
-  }
-  return json.data;
-};
+import { Product } from '@/shared/models';
+import { deleteProduct, fetchProducts } from '@/lib/fetchData';
 
 export const useProducts = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -30,21 +22,8 @@ export const useProducts = () => {
   }, [productsQuery.data]);
 
   const deleteProductMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await fetch('/api/product', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      });
-      const json: ApiResponse<Product> = await response.json();
-      if (json.status === 'failed') {
-        notification.error({
-          message: 'Error',
-          description: json.message,
-        });
-        throw new Error(json.message || 'Failed to delete product');
-      }
-      return json.data;
+    mutationFn: (id: number) => {
+      return deleteProduct(id);
     },
     onSuccess: () => {
       notification.success({

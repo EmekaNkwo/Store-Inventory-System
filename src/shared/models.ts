@@ -1,5 +1,10 @@
 import React from 'react';
 
+export enum Routes {
+  INVENTORY = '/inventory',
+  DASHBOARD = '/dashboard',
+  STAFFS = '/staffs',
+}
 export enum ProductStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
@@ -16,6 +21,25 @@ export enum StaffRole {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
   STAFF = 'STAFF',
+}
+
+export interface DashboardProductStats {
+  total: number;
+  active: number;
+  inactive: number;
+  outOfStock: number;
+  discontinued: number;
+}
+
+export interface DashboardStaffStats {
+  total: number;
+  active: number;
+  inactive: number;
+}
+
+export interface DashboardData {
+  products: DashboardProductStats;
+  staffs: DashboardStaffStats;
 }
 
 export interface Product {

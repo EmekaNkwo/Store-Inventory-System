@@ -10,11 +10,12 @@ import {
   FilledButton,
   OutlinedButton,
 } from '@/shared/UIs/ReusableComponent';
+import { InventoryTableSkeleton } from '@/shared/UIs/SkeletalLoading';
 
 import { useProducts } from '../Products/useProducts';
 import AddProductModal from '../Products/AddProduct/AddProductModal';
 
-const Inventory = () => {
+const Inventory = ({ isDashboardView }: { isDashboardView?: boolean }) => {
   const {
     isLoading,
     openModal,
@@ -92,6 +93,7 @@ const Inventory = () => {
     {
       title: 'Action',
       key: 'action',
+      className: isDashboardView ? 'hidden' : '',
       render: (record) => (
         <Space size="middle">
           <OutlinedButton
@@ -128,26 +130,30 @@ const Inventory = () => {
       {openModal && (
         <AddProductModal openModal={openModal} setOpenModal={setOpenModal} />
       )}
-      <div className="flex flex-col gap-3">
-        <TextHeader text="Inventory" />
-        <div className="flex justify-end">
-          <FilledButton
-            onClick={() => {
-              handleClearProduct();
-              setOpenModal(true);
-            }}
-            size="middle"
-            title="Add Product"
+      {isLoading ? (
+        <InventoryTableSkeleton isDashboardView={isDashboardView} />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {!isDashboardView && <TextHeader text="Products" />}
+          <div className={isDashboardView ? 'hidden' : 'flex justify-end'}>
+            <FilledButton
+              onClick={() => {
+                handleClearProduct();
+                setOpenModal(true);
+              }}
+              size="middle"
+              title="Add Product"
+            />
+          </div>
+          <CustomTable
+            columns={columns}
+            dataSource={isDashboardView ? products.slice(0, 5) : products}
+            loading={isLoading}
+            rowKey="id"
+            pagination={isDashboardView ? false : { pageSize: 20 }}
           />
         </div>
-        <CustomTable
-          columns={columns}
-          dataSource={products}
-          loading={isLoading}
-          rowKey="id"
-          pagination={{ pageSize: 20 }}
-        />
-      </div>
+      )}
     </>
   );
 };

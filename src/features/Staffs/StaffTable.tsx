@@ -10,11 +10,12 @@ import {
   OutlinedButton,
 } from '@/shared/UIs/ReusableComponent';
 import { Staff } from '@/shared/models';
+import { InventoryTableSkeleton } from '@/shared/UIs/SkeletalLoading';
 
 import AddStaffModal from './AddStaff/AddStaffModal';
 import { useStaff } from './useStaff';
 
-const StaffTable = () => {
+const StaffTable = ({ isDashboardView }: { isDashboardView: boolean }) => {
   const {
     isLoading,
     openModal,
@@ -66,6 +67,7 @@ const StaffTable = () => {
     {
       title: 'Action',
       key: 'action',
+      className: isDashboardView ? 'hidden' : '',
       render: (record) => (
         <Space size="middle">
           <OutlinedButton
@@ -114,34 +116,40 @@ const StaffTable = () => {
       {openModal && (
         <AddStaffModal openModal={openModal} setOpenModal={setOpenModal} />
       )}
-      <div className="flex flex-col gap-3">
-        <TextHeader text="Staffs" />
-        <div className="flex gap-2 justify-end">
-          <OutlinedButton
-            onClick={() => {
-              handleDownloadCSV();
-            }}
-            size="middle"
-            title="Download CSV"
-          />
-          <FilledButton
-            onClick={() => {
-              handleClearStaff();
-              setOpenModal(true);
-            }}
-            size="middle"
-            title="Add Staff"
+      {isLoading ? (
+        <InventoryTableSkeleton isDashboardView={isDashboardView} />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {!isDashboardView && <TextHeader text="Staffs" />}
+          <div
+            className={isDashboardView ? 'hidden' : 'flex gap-2 justify-end'}
+          >
+            <OutlinedButton
+              onClick={() => {
+                handleDownloadCSV();
+              }}
+              size="middle"
+              title="Download CSV"
+            />
+            <FilledButton
+              onClick={() => {
+                handleClearStaff();
+                setOpenModal(true);
+              }}
+              size="middle"
+              title="Add Staff"
+            />
+          </div>
+          <CustomTable
+            columns={columns}
+            dataSource={isDashboardView ? staffs.slice(0, 5) : staffs}
+            loading={isLoading}
+            rowKey="id"
+            pagination={isDashboardView ? false : { pageSize: 20 }}
           />
         </div>
-        <CustomTable
-          columns={columns}
-          dataSource={staffs}
-          loading={isLoading}
-          rowKey="id"
-          pagination={{ pageSize: 20 }}
-        />
-      </div>
+      )}
     </>
   );
 };
-export default StaffTable;
+export default React.memo(StaffTable);

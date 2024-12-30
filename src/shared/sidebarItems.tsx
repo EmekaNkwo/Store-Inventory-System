@@ -1,27 +1,29 @@
 import { ItemType, MenuItemType } from 'antd/es/menu/interface';
-import { FaTags, FaUsers } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa';
 import { IoCart } from 'react-icons/io5';
 import { MdSpaceDashboard } from 'react-icons/md';
+
+import { Routes } from './models';
 
 export const sidebarItems: ItemType<MenuItemType>[] = [
   {
     label: 'Analytics',
-    key: '/dashboard',
+    key: Routes.DASHBOARD,
     icon: <MdSpaceDashboard size={20} />,
   },
   {
-    label: 'Inventory',
-    key: '/inventory',
+    label: 'Products',
+    key: Routes.INVENTORY,
     icon: <IoCart size={20} />,
   },
   {
     label: 'Staffs',
-    key: '/staffs',
+    key: Routes.STAFFS,
     icon: <FaUsers size={20} />,
   },
-  {
-    label: 'Orders',
-    key: '/orders',
-    icon: <FaTags size={20} />,
-  },
+  // {
+  //   label: 'Orders',
+  //   key: '/orders',
+  //   icon: <FaTags size={20} />,
+  // },
 ];
