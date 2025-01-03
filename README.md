@@ -26,3 +26,9 @@
 - Prisma
 - Zustand
 - React Query
+- PostgreSQL
+
+## Installation:
+
+- `npm i`
+- `npm run dev`
